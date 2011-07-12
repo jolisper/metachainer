@@ -1,14 +1,16 @@
 package ar.com.jolisper.metachainer.factory;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 
 import org.reflections.Reflections;
 
-import ar.com.jolisper.metachainer.annotations.ChainBean;
+import ar.com.jolisper.metachainer.annotations.ChainName;
 import ar.com.jolisper.metachainer.annotations.ChainStep;
 
 /**
@@ -27,18 +29,21 @@ public class ChainFactory {
 		return instance;
 	}
 	/* ********* */
-
-	@SuppressWarnings("unchecked")
+	
+	/**
+	 * Create a chain by name and package
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Chain create(String chainName, String chainPackage) {
 		
 	     Reflections reflections = new Reflections(chainPackage);
-	     Set<Class<?>> annotated = reflections.getTypesAnnotatedWith(ChainBean.class);
+	     Set<Class<?>> annotated = reflections.getTypesAnnotatedWith(ChainName.class);
 	     
 	     Class chainClass = null;
 	     
 	     for (Class clazz : annotated) {
-	    	 Annotation annotation = clazz.getAnnotation(ChainBean.class);
-	    	 String name = ((ChainBean) annotation).name();
+	    	 Annotation annotation = clazz.getAnnotation(ChainName.class);
+	    	 String name = ((ChainName) annotation).value();
 	    	 if (name.equals(chainName)) {
 	    		 chainClass = clazz;
 	    		 break;
@@ -49,38 +54,53 @@ public class ChainFactory {
 	    	 throw new RuntimeException("Chain not found: chainName = " + chainName);
 	     }
 	     
-	     Object chainObject = null;
+	     Object chainInstance = null;
 	     try {
-	    	 chainObject = chainClass.newInstance();
-	     } catch (InstantiationException e1) {
-	    	 // TODO Auto-generated catch block
-	    	 e1.printStackTrace();
-	     } catch (IllegalAccessException e1) {
-	    	 // TODO Auto-generated catch block
-	    	 e1.printStackTrace();
-	     }
+	    	 chainInstance = chainClass.newInstance();
+	     } catch (Exception e) {
+	    	 throw new RuntimeException("Error on chain instantiation");
+	     } 
 	     
 	     Method[] methods = chainClass.getDeclaredMethods();
 	     
-	     try {
-			for (Method method : methods) {
-				 if (method.getAnnotation(ChainStep.class) != null) {
-					 //System.out.println("method founded!");
-					 method.invoke(chainObject, new HashMap<String, Object>());
-				 }
+	     List<Method> methodList = new ArrayList<Method>();
+
+	 	for (Method method : methods) {
+			 if (method.getAnnotation(ChainStep.class) != null) {
+				 methodList.add(method);
 			 }
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		 }
+	 	
+	 	sort(methodList);
 	     
-	     return new Chain();
+	     return new Chain(chainInstance, methodList);
+	}
+	
+	/** 		 
+	 * Order methods by order annotation attribute
+	 * @param methodList
+	 */
+	private void sort(List<Method> methodList) {
+
+	 	Collections.sort(methodList, new Comparator<Method>() {
+
+			@Override
+			public int compare(Method m1, Method m2) {
+				
+				int method1order = m1.getAnnotation(ChainStep.class).order();
+				int method2order = m2.getAnnotation(ChainStep.class).order();
+				
+				if (method1order > method2order) {
+					return 1;
+				}
+
+				if (method1order < method2order) {
+					return -1;
+				}
+				
+				return 0;
+			}
+	 	});
 	}
 	
 }
