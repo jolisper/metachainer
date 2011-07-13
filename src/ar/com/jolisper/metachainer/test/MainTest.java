@@ -1,8 +1,5 @@
 package ar.com.jolisper.metachainer.test;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import ar.com.jolisper.metachainer.factory.Chain;
 import ar.com.jolisper.metachainer.factory.ChainFactory;
 
@@ -17,12 +14,22 @@ public class MainTest {
 		
 		Chain chain = factory.create("myChain", "ar.com.jolisper.metachainer.examples");
 		
-		Map<String, Object> hashMap = new HashMap<String, Object>() ;
+		chain.setParameter("first key", "first param")
+			.setParameter("second key", "second param")
+			.start();
 		
-		hashMap.put("first key", "first param");
-		hashMap.put("second key", "second param");
+		/*
+		ChainError error = null;
 		
-		chain.start(hashMap);
+		if ((error = chain.getError()) != null) {
+			StringBuffer msg = new StringBuffer();
+			msg.append("chainName="+error.getChainName()+":");
+			msg.append("chainMethod="+error.getMethodName()+":");
+			msg.append("chainOrder="+error.getMethodOrder()+":");
+			msg.append("msg="+error.getMessage());
+			System.out.println(msg.toString());
+		}
+		*/
 	}
 
 }

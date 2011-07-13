@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Chain 
+ * Chain step annotation
  * @author jolisper
  *
  */
@@ -15,5 +15,6 @@ import java.lang.annotation.Target;
 public @interface ChainStep {
 	
 	public int order();
+	public boolean active() default true;
 
 }
