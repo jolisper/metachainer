@@ -14,14 +14,16 @@ import ar.com.jolisper.metachainer.annotations.ChainStep;
 public class Chain {
 	
 	private Object chainInstance;
-	private List<Method> methodList;
+	private List<Method> steps;
+	private List<Method> activators;
 	private Method ensure;
 	private ChainContext context;
 	private boolean fail;
 
-	public Chain(Object chainInstance, List<Method> methodList, Method ensure, ChainContext context) {
+	public Chain(Object chainInstance, List<Method> steps, List<Method> activators, Method ensure, ChainContext context) {
 		this.chainInstance = chainInstance;
-		this.methodList = methodList;
+		this.steps = steps;
+		this.activators = activators;
 		this.ensure = ensure;
 		this.context = context;
 		this.setFailOff();
@@ -37,7 +39,7 @@ public class Chain {
 		Method currentMethod = null;
 		try {
 			// Main loop
-			for (Method method : methodList) {
+			for (Method method : steps) {
 				currentMethod = method;
 				if (method.getAnnotation(ChainStep.class).active()) {
 					method.invoke(chainInstance, context);

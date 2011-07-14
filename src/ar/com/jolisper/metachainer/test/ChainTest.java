@@ -1,5 +1,7 @@
 package ar.com.jolisper.metachainer.test;
 
+import java.lang.reflect.Method;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -58,6 +60,23 @@ public class ChainTest {
 			Chain chain = factory.create("breakOnErrorsClassChain", "ar.com.jolisper.metachainer.test");
 			
 			chain.start();
+	}
+
+	@Test
+	public void activatorMethod() throws SecurityException, NoSuchMethodException {
+			
+			Method method = Object.class.getMethod("toString", String.class);
+			
+			System.out.println(method.getName());
+		
+			/*
+			ChainFactory factory = ChainFactory.instance();
+			Chain chain = factory.create("activatorChain", "ar.com.jolisper.metachainer.test");
+			
+			ChainContext context = chain.start();
+	
+			Assert.assertNull( context.get("unactive method result") ); 
+			*/
 	}
 	
 }

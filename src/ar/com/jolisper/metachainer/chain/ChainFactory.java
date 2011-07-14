@@ -13,6 +13,7 @@ import org.reflections.Reflections;
 import ar.com.jolisper.metachainer.annotations.ChainEnsure;
 import ar.com.jolisper.metachainer.annotations.ChainName;
 import ar.com.jolisper.metachainer.annotations.ChainStep;
+import ar.com.jolisper.metachainer.annotations.ChainStepActivator;
 
 /**
  * Chain Factory
@@ -63,23 +64,27 @@ public class ChainFactory {
 
 		Method[] methods = chainClass.getDeclaredMethods();
 
-		List<Method> methodList = new ArrayList<Method>();
-		Method ensureMethod = null;
+		List<Method> steps = new ArrayList<Method>();
+		List<Method> activators = new ArrayList<Method>();
+		Method ensure = null;
 
 		for (Method method : methods) {
 			if (method.getAnnotation(ChainStep.class) != null) {
-				methodList.add(method);
+				steps.add(method);
 			}
 			
 			if (method.getAnnotation(ChainEnsure.class) != null) {
-				ensureMethod = method;
+				ensure = method;
 			}
-			
+
+			if (method.getAnnotation(ChainStepActivator.class) != null) {
+				activators.add(method);
+			}
 		}
 
-		sort(methodList);
+		sort(steps);
 
-		return new Chain(chainInstance, methodList, ensureMethod, createContext());
+		return new Chain(chainInstance, steps, activators, ensure, createContext());
 	}
 	
 	/** 		 
