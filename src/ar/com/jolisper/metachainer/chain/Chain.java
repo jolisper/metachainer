@@ -36,6 +36,7 @@ public class Chain {
 	public ChainContext start() {
 		Method currentMethod = null;
 		try {
+			// Main loop
 			for (Method method : methodList) {
 				currentMethod = method;
 				if (method.getAnnotation(ChainStep.class).active()) {
