@@ -16,5 +16,6 @@ public @interface ChainStep {
 	
 	public int order();
 	public boolean active() default true;
+	public boolean breakOnErrors() default false;
 
 }

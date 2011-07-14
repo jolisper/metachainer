@@ -1,4 +1,4 @@
-package ar.com.jolisper.metachainer.factory;
+package ar.com.jolisper.metachainer.chain;
 
 public class ChainError extends RuntimeException {
 
@@ -6,6 +6,7 @@ public class ChainError extends RuntimeException {
 	private String chainName;
 	private String methodName;
 	private int methodOrder;
+	private ChainContext context;
 
 	public ChainError(String msg, Throwable t) {
 		super(msg, t);
@@ -35,4 +36,12 @@ public class ChainError extends RuntimeException {
 		return methodOrder;
 	}
 
+	public void setContext(ChainContext context) {
+		this.context = context;
+	}
+
+	public ChainContext getContext() {
+		return context;
+	}
+	
 }

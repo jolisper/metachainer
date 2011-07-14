@@ -5,11 +5,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.TYPE)
+/**
+ * The method annotated with this annotation run when the chain throws exception.
+ * @author jperez
+ *
+ */
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ChainName {
+public @interface ChainEnsure {
 	
-	public String value();
-	public boolean breakOnErrors() default false;
-
 }

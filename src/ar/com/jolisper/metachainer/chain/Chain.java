@@ -1,4 +1,4 @@
-package ar.com.jolisper.metachainer.factory;
+package ar.com.jolisper.metachainer.chain;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -15,12 +15,14 @@ public class Chain {
 	
 	private Object chainInstance;
 	private List<Method> methodList;
+	private Method ensure;
 	private ChainContext context;
 	private boolean fail;
 
-	public Chain(Object chainInstance, List<Method> methodList, ChainContext context) {
+	public Chain(Object chainInstance, List<Method> methodList, Method ensure, ChainContext context) {
 		this.chainInstance = chainInstance;
 		this.methodList = methodList;
+		this.ensure = ensure;
 		this.context = context;
 		this.setFailOff();
 	}
@@ -42,12 +44,30 @@ public class Chain {
 			}
 		} catch (Throwable t) {
 			this.setFailOn();
-			ChainError chainError = new ChainError(t.getMessage(), t);
-			chainError.setChainName(currentMethod.getDeclaringClass().getAnnotation(ChainName.class).value());
-			chainError.setMethodName(currentMethod.getName());
-			chainError.setMethodOrder(currentMethod.getAnnotation(ChainStep.class).order());
-		}
+			
+			// Run the ensure method
+			try {
+				if (ensure != null) {
+					ensure.invoke(chainInstance, context);
+				}
+			} catch (Throwable et) {
+				throw new RuntimeException(et);
+			} 
+			
+			boolean breakOnErrorsMethod = currentMethod.getAnnotation(ChainStep.class).breakOnErrors();
+			boolean breakOnErrorsClass = currentMethod.getDeclaringClass().getAnnotation(ChainName.class).breakOnErrors();
+			
+			if (breakOnErrorsClass || breakOnErrorsMethod) {
+				ChainError chainError = new ChainError(t.getMessage(), t);
+				chainError.setChainName(currentMethod.getDeclaringClass().getAnnotation(ChainName.class).value());
+				chainError.setMethodName(currentMethod.getName());
+				chainError.setMethodOrder(currentMethod.getAnnotation(ChainStep.class).order());
+				chainError.setContext(context);
 
+				throw chainError;
+			}
+		}
+		
 		return context;
 	}
 

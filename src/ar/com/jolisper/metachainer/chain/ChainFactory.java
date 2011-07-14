@@ -1,4 +1,4 @@
-package ar.com.jolisper.metachainer.factory;
+package ar.com.jolisper.metachainer.chain;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.reflections.Reflections;
 
+import ar.com.jolisper.metachainer.annotations.ChainEnsure;
 import ar.com.jolisper.metachainer.annotations.ChainName;
 import ar.com.jolisper.metachainer.annotations.ChainStep;
 
@@ -33,16 +34,14 @@ public class ChainFactory {
 	/**
 	 * Create a chain by name and package
 	 */
-
-	@SuppressWarnings("unchecked")
 	public Chain create(String chainName, String chainPackage) {
 
 		Reflections reflections = new Reflections(chainPackage);
 		Set<Class<?>> annotated = reflections.getTypesAnnotatedWith(ChainName.class);
 
-		Class chainClass = null;
+		Class<?> chainClass = null;
 
-		for (Class clazz : annotated) {
+		for (Class<?> clazz : annotated) {
 			Annotation annotation = clazz.getAnnotation(ChainName.class);
 			String name = ((ChainName) annotation).value();
 			if (name.equals(chainName)) {
@@ -52,8 +51,7 @@ public class ChainFactory {
 		}
 
 		if (chainClass == null) {
-			throw new RuntimeException("Chain not found: chainName = "
-					+ chainName);
+			throw new RuntimeException("Chain not found: chainName = " + chainName);
 		}
 
 		Object chainInstance = null;
@@ -66,16 +64,22 @@ public class ChainFactory {
 		Method[] methods = chainClass.getDeclaredMethods();
 
 		List<Method> methodList = new ArrayList<Method>();
+		Method ensureMethod = null;
 
 		for (Method method : methods) {
 			if (method.getAnnotation(ChainStep.class) != null) {
 				methodList.add(method);
 			}
+			
+			if (method.getAnnotation(ChainEnsure.class) != null) {
+				ensureMethod = method;
+			}
+			
 		}
 
 		sort(methodList);
 
-		return new Chain(chainInstance, methodList, createContext());
+		return new Chain(chainInstance, methodList, ensureMethod, createContext());
 	}
 	
 	/** 		 
@@ -100,6 +104,7 @@ public class ChainFactory {
 					return -1;
 				}
 				
+				//TODO: Its not valid that two diferents  steps have the same order , add validation 
 				return 0;
 			}
 	 	});

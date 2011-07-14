@@ -1,4 +1,4 @@
-package ar.com.jolisper.metachainer.factory;
+package ar.com.jolisper.metachainer.chain;
 
 import java.util.HashMap;
 import java.util.Map;
