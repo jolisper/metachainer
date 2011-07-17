@@ -19,7 +19,8 @@ import ar.com.jolisper.metachainer.annotation.StepValidator;
 import ar.com.jolisper.metachainer.exception.ChainError;
 
 /**
- * Chain Factory
+ * Chain Factory.
+ * 
  * @author Jorge Luis Pérez (jolisper@gmail.com)
  *
  */

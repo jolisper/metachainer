@@ -1,5 +1,12 @@
 package ar.com.jolisper.metachainer.exception;
 
+/**
+ * This exception is throw if an invocation
+ * error occurs and breakOnErrors is set to true.
+ * 
+ * @author Jorge Luis Pérez (jolisper@gmail.com)
+ *
+ */
 public class BreakOnErrorException extends ChainError {
 
 	/**

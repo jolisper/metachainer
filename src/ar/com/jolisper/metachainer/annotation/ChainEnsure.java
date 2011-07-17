@@ -7,7 +7,8 @@ import java.lang.annotation.Target;
 
 /**
  * The method annotated with this annotation run when the chain throws exception.
- * @author jperez
+ * 
+ * @author Jorge Luis Pérez (jolisper@gmail.com)
  *
  */
 @Target(ElementType.METHOD)

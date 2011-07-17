@@ -12,7 +12,8 @@ import ar.com.jolisper.metachainer.exception.BreakOnInvalidException;
 import ar.com.jolisper.metachainer.exception.ChainError;
 
 /**
- * Represents the chain itself
+ * Represents the chain itself.
+ * 
  * @author Jorge Luis Pérez (jolisper@gmail.com)
  *
  */
@@ -112,7 +113,7 @@ public class Chain {
 	}
 	
 	/**
-	 * Running method validations
+	 * Running method validations.
 	 * @throws InvocationTargetException 
 	 * @throws IllegalAccessException 
 	 * @throws IllegalArgumentException 

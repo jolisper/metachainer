@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 /**
  * Mark a method as a validator of one or more chain methods.
  * The annotated method must return a boolean value.
+ * 
  * @author Jorge Luis Pérez (jolisper@gmail.com)
  *
  */

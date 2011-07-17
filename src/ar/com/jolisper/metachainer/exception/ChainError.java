@@ -2,6 +2,13 @@ package ar.com.jolisper.metachainer.exception;
 
 import ar.com.jolisper.metachainer.core.ChainContext;
 
+/**
+ * This exception is throw when and unexpected
+ * error occurs. Is the main exception type.
+ * 
+ * @author Jorge Luis Pérez (jolisper@gmail.com)
+ *
+ */
 public class ChainError extends RuntimeException {
 
 	private static final long serialVersionUID = 7243535258262914708L;

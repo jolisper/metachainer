@@ -1,5 +1,12 @@
 package ar.com.jolisper.metachainer.exception;
 
+/**
+ * This exception is throw if a step validator
+ * returns false and breakOnInvalid is set to true.
+ * 
+ * @author Jorge Luis Pérez (jolisper@gmail.com)
+ *
+ */
 public class BreakOnInvalidException extends ChainError {
 	
 	/**
