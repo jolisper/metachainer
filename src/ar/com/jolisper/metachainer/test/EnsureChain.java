@@ -1,9 +1,9 @@
 package ar.com.jolisper.metachainer.test;
 
-import ar.com.jolisper.metachainer.annotations.ChainEnsure;
-import ar.com.jolisper.metachainer.annotations.ChainName;
-import ar.com.jolisper.metachainer.annotations.ChainStep;
-import ar.com.jolisper.metachainer.chain.ChainContext;
+import ar.com.jolisper.metachainer.annotation.ChainEnsure;
+import ar.com.jolisper.metachainer.annotation.ChainName;
+import ar.com.jolisper.metachainer.annotation.ChainStep;
+import ar.com.jolisper.metachainer.core.ChainContext;
 
 @ChainName("ensureChain")
 public class EnsureChain {

@@ -1,4 +1,4 @@
-package ar.com.jolisper.metachainer.annotations;
+package ar.com.jolisper.metachainer.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

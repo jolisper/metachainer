@@ -1,23 +1,26 @@
-package ar.com.jolisper.metachainer.chain;
+package ar.com.jolisper.metachainer.core;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.reflections.Reflections;
 
-import ar.com.jolisper.metachainer.annotations.ChainEnsure;
-import ar.com.jolisper.metachainer.annotations.ChainName;
-import ar.com.jolisper.metachainer.annotations.ChainStep;
-import ar.com.jolisper.metachainer.annotations.ChainStepActivator;
+import ar.com.jolisper.metachainer.annotation.ChainEnsure;
+import ar.com.jolisper.metachainer.annotation.ChainName;
+import ar.com.jolisper.metachainer.annotation.ChainStep;
+import ar.com.jolisper.metachainer.annotation.StepValidator;
+import ar.com.jolisper.metachainer.exception.ChainError;
 
 /**
  * Chain Factory
- * @author jorge
+ * @author Jorge Luis Pérez (jolisper@gmail.com)
  *
  */
 public class ChainFactory {
@@ -65,9 +68,10 @@ public class ChainFactory {
 		Method[] methods = chainClass.getDeclaredMethods();
 
 		List<Method> steps = new ArrayList<Method>();
-		List<Method> activators = new ArrayList<Method>();
+		Map<String, List<Method>> validators = new HashMap<String, List<Method>>();
 		Method ensure = null;
 
+		StepValidator stepValidator = null;
 		for (Method method : methods) {
 			if (method.getAnnotation(ChainStep.class) != null) {
 				steps.add(method);
@@ -76,24 +80,61 @@ public class ChainFactory {
 			if (method.getAnnotation(ChainEnsure.class) != null) {
 				ensure = method;
 			}
-
-			if (method.getAnnotation(ChainStepActivator.class) != null) {
-				activators.add(method);
+			
+			if ( (stepValidator = method.getAnnotation(StepValidator.class) ) != null) {
+				String[] associatedMethods = stepValidator.value();
+				
+				for (String methodName : associatedMethods) {
+					if (validators.get(methodName) != null) {
+						validators.get(methodName).add(method);
+					} else {
+						List<Method> validatorMethods = new ArrayList<Method>();
+						validatorMethods.add(method);
+						validators.put(methodName, validatorMethods);
+					}
+				}
+				
 			}
 		}
-
+		
+		validateOrder(steps);
+		
 		sort(steps);
 
-		return new Chain(chainInstance, steps, activators, ensure, createContext());
+		return new Chain(chainInstance, steps, validators, ensure, createContext());
 	}
 	
-	/** 		 
-	 * Order methods by order annotation attribute
-	 * @param methodList
+	/**
+	 * Validate step orders
+	 * @param steps
 	 */
-	private void sort(List<Method> methodList) {
+	private void validateOrder(List<Method> steps) {
+		
+		List<Integer> orders = new ArrayList<Integer>();
+		
+		for (Method step : steps) {
+			Integer stepOrder = step.getAnnotation(ChainStep.class).order();
+			
+			if (step.getAnnotation(ChainStep.class).order() < 1) {
+				throw new ChainError("The order number must be greater than 1, step = " + step.getName());
+			}
 
-	 	Collections.sort(methodList, new Comparator<Method>() {
+			if (orders.contains(stepOrder)) {
+				throw new ChainError("There is another step with the same order number, step = " + step.getName());
+			}
+			
+			orders.add(stepOrder);
+		}
+		
+	}
+
+	/** 		 
+	 * Sort steps by order annotation attribute
+	 * @param stepsList
+	 */
+	private void sort(List<Method> stepsList) {
+
+	 	Collections.sort(stepsList, new Comparator<Method>() {
 
 			@Override
 			public int compare(Method m1, Method m2) {
