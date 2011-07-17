@@ -58,6 +58,7 @@ public class Chain {
 					if (validate(step, chainInstance, context)) {
 						step.invoke(chainInstance, context);
 					} else if (stepMetadata.breakOnInvalid()) {
+						setFailOn();
 						ChainName chainMetadata = 
 							currentStep.getDeclaringClass().getAnnotation(ChainName.class);
 						BreakOnInvalidException boi = 
@@ -71,7 +72,7 @@ public class Chain {
 				}
 			}
 		} catch (InvocationTargetException ite) {
-			this.setFailOn();
+			setFailOn();
 			// Run the ensure method
 			try {
 				if (ensure != null) {
