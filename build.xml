@@ -7,7 +7,6 @@
 		<fileset dir="${lib.dir}" includes="**/*.jar"/>
 	</path>
 	
-	
 	<target name="clean">
         <delete dir="build"/>
     </target>
@@ -19,9 +18,9 @@
 
     <target name="jar" depends="clean, compile">
         <mkdir dir="build/jar"/>
-        <jar destfile="build/jar/metachainer-0.2.0.jar" basedir="build/classes">
+        <jar destfile="build/jar/metachainer-0.5.0.jar" basedir="build/classes">
             <manifest>
-                <attribute name="Main-Class" value="metachainer-0.2.0"/>
+                <attribute name="Version" value="0.5.0"/>
             </manifest>
         </jar>
     </target>
