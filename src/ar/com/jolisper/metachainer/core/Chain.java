@@ -51,6 +51,7 @@ public class Chain {
 	public ChainContext start() {
 		Method currentStep = null;
 		try {
+			// FIXME  this main loop needs refactoring
 			// Main loop
 			for (Method step : steps) {
 				currentStep = step;
