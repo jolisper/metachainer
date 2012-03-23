@@ -61,7 +61,7 @@ Invoking the chain:
 		
 		ChainFactory factory = ChainFactory.instance();
 		
-		Chain chain = factory.create("myChain", "my.package.chain");
+		Chain chain = factory.create(MyChain.class);
 		
 		ChainContext context =
 		chain.setParameter("myParameter1", 1)
