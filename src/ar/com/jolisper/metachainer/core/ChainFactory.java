@@ -1,6 +1,5 @@
 package ar.com.jolisper.metachainer.core;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,12 +7,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import org.reflections.Reflections;
 
 import ar.com.jolisper.metachainer.annotation.ChainEnsure;
-import ar.com.jolisper.metachainer.annotation.ChainName;
 import ar.com.jolisper.metachainer.annotation.ChainStep;
 import ar.com.jolisper.metachainer.annotation.StepValidator;
 import ar.com.jolisper.metachainer.exception.ChainError;
@@ -39,24 +34,12 @@ public class ChainFactory {
 	/**
 	 * Create a chain by name and package
 	 */
-	public Chain create(String chainName, String chainPackage) {
-
-		Reflections reflections = new Reflections(chainPackage);
-		Set<Class<?>> annotated = reflections.getTypesAnnotatedWith(ChainName.class);
-
-		Class<?> chainClass = null;
-
-		for (Class<?> clazz : annotated) {
-			Annotation annotation = clazz.getAnnotation(ChainName.class);
-			String name = ((ChainName) annotation).value();
-			if (name.equals(chainName)) {
-				chainClass = clazz;
-				break;
-			}
-		}
+	public Chain create(Class<?> clazz) {
+		
+		Class<?> chainClass = clazz;
 
 		if (chainClass == null) {
-			throw new RuntimeException("Chain not found: chainName = " + chainName);
+			throw new RuntimeException("Chain not found! ");
 		}
 
 		Object chainInstance = null;

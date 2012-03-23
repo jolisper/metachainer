@@ -23,7 +23,7 @@ public class MainTest {
 		
 		ChainFactory factory = ChainFactory.instance();
 		
-		Chain chain = factory.create("parametersChain", "ar.com.jolisper.metachainer.test");
+		Chain chain = factory.create(ParametersChain.class);
 		
 		ChainContext context =
 		chain.setParameter("parameter1", 1)
@@ -38,7 +38,7 @@ public class MainTest {
 	public void ensureMethod() {
 		
 			ChainFactory factory = ChainFactory.instance();
-			Chain chain = factory.create("ensureChain", "ar.com.jolisper.metachainer.test");
+			Chain chain = factory.create(EnsureChain.class);
 			ChainContext context = chain.start();
 			
 			Assert.assertTrue(chain.fail());
@@ -49,7 +49,7 @@ public class MainTest {
 	public void stepValidator() {
 			
 			ChainFactory factory = ChainFactory.instance();
-			Chain chain = factory.create("stepValidatorChain", "ar.com.jolisper.metachainer.test");
+			Chain chain = factory.create(ValidatorChain.class);
 			
 			ChainContext context = chain.start();
 	
@@ -61,21 +61,21 @@ public class MainTest {
 	public void orderNumberMustBeGreaterThan1() {
 			
 			ChainFactory factory = ChainFactory.instance();
-			factory.create("orderNumberMustBeGreaterThan1Chain", "ar.com.jolisper.metachainer.test");
+			factory.create(OrderNumberMustBeGreaterThan1Chain.class);
 	}
 	
 	@Test(expected=ChainError.class)
 	public void thereIsAnotherStepWithTheSameOrderNumber() {
 			
 			ChainFactory factory = ChainFactory.instance();
-			factory.create("thereIsAnotherStepWithTheSameOrderNumber", "ar.com.jolisper.metachainer.test");
+			factory.create(ThereIsAnotherStepWithTheSameOrderNumber.class);
 	}
 
 	@Test(expected=BreakOnErrorException.class)
 	public void breakOnErrorsMethod() {
 
 			ChainFactory factory = ChainFactory.instance();
-			Chain chain = factory.create("breakOnErrorsMethodChain", "ar.com.jolisper.metachainer.test");
+			Chain chain = factory.create(BreakOnErrorsMethodChain.class);
 			
 			chain.start();
 	}
@@ -84,7 +84,7 @@ public class MainTest {
 	public void breakOnErrorsClass() {
 			
 			ChainFactory factory = ChainFactory.instance();
-			Chain chain = factory.create("breakOnErrorsClassChain", "ar.com.jolisper.metachainer.test");
+			Chain chain = factory.create(BreakOnErrorsClassChain.class);
 			
 			chain.start();
 	}
@@ -93,7 +93,7 @@ public class MainTest {
 	public void breakOnInvalidMethod() {
 			
 			ChainFactory factory = ChainFactory.instance();
-			Chain chain = factory.create("breakOnInvalidMethodChain", "ar.com.jolisper.metachainer.test");
+			Chain chain = factory.create(BreakOnInvalidMethodChain.class);
 			
 			chain.start();
 	}
