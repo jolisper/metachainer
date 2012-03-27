@@ -22,8 +22,15 @@ import ar.com.jolisper.metachainer.exception.ChainError;
  */
 public class ChainDiscovery {
 
+	/**
+	 * singleton instance
+	 */
 	private static ChainDiscovery instance = null;
-	private AnnotationDB annotationDB;
+	
+	/**
+	 * a list  of classes annotated with @ChainName
+	 */
+	private Set<String> chainClasses = null; 
 	
 	private ChainDiscovery() {
 
@@ -37,22 +44,36 @@ public class ChainDiscovery {
 		
 		if(instance == null) {
 
-			//get path
-			URL[] urls = ClasspathUrlFinder.findClassPaths(); // scan java.class.path
-			AnnotationDB db = new AnnotationDB(); 
-			
-			//this operation is expensive and must by done only once
-			try {
-				db.scanArchives(urls);
-			} catch (IOException e) {
-				//TODO: handle error
-				throw new ChainError("Error finding classes", e);
-			}
-			
-			//setup
-			instance = new ChainDiscovery();
-			instance.annotationDB = db;
+			instance = createInstance();
 		}
+		
+		return instance;
+	}
+
+	/**
+	 * creates an instance and finds chain classes <br />
+	 * this operation is expensive and must by done only once
+	 * 
+	 * @return an instance of ChainDiscovery
+	 */
+	private static ChainDiscovery createInstance() {
+		//get path
+		URL[] urls = ClasspathUrlFinder.findClassPaths(); // scan java.class.path
+		AnnotationDB db = new AnnotationDB(); 
+		
+		//find all classes
+		try {
+			db.scanArchives(urls);
+		} catch (IOException e) {
+			//TODO: handle error
+			throw new ChainError("Error finding classes", e);
+		}
+		
+		//setup
+		ChainDiscovery instance = new ChainDiscovery();
+		
+		//save classes
+		instance.chainClasses  = db.getAnnotationIndex().get(ChainName.class.getCanonicalName());
 		
 		return instance;
 	}
@@ -65,20 +86,15 @@ public class ChainDiscovery {
 	 * @return 
 	 */
 	public static List<Chain> findByName(String search) {
-		
-		//get instance
-		ChainDiscovery my = getInstance();
-
+		 
 		//factory
 		ChainFactory factory = ChainFactory.instance();
 		
-		//find classes
-		Set<String> clazzList = my.annotationDB.getAnnotationIndex().get(ChainName.class.getCanonicalName());
-		
+		//result list
 		List<Chain> chains = new ArrayList<Chain>();
 		
 		//find by name
-		for (String className : clazzList) {
+		for (String className : getInstance().chainClasses) {
 			
 			Class<?> theClass = null;
 			try {
@@ -90,7 +106,7 @@ public class ChainDiscovery {
 			//validate name
 			String chainName = theClass.getAnnotation(ChainName.class).value();
 			
-			if(search.equalsIgnoreCase(chainName)) {
+			if( search.equalsIgnoreCase(chainName) ) {
 				//create chain
 				chains.add( factory.create( theClass )  ); 
 			}

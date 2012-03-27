@@ -101,6 +101,7 @@ public class MainTest {
 			chain.start();
 	}
 	
+	@Test
 	public void findChainByName() {
 		
 		List<Chain> finds = ChainDiscovery.findByName("stepValidatorChain");
