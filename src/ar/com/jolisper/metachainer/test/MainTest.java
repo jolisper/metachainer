@@ -1,5 +1,7 @@
 package ar.com.jolisper.metachainer.test;
 
+import java.util.List;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -10,6 +12,7 @@ import ar.com.jolisper.metachainer.core.ChainFactory;
 import ar.com.jolisper.metachainer.exception.BreakOnErrorException;
 import ar.com.jolisper.metachainer.exception.BreakOnInvalidException;
 import ar.com.jolisper.metachainer.exception.ChainError;
+import ar.com.jolisper.metachainer.utils.ChainDiscovery;
 
 /**
  * Main tests
@@ -96,6 +99,13 @@ public class MainTest {
 			Chain chain = factory.create(BreakOnInvalidMethodChain.class);
 			
 			chain.start();
+	}
+	
+	public void findChainByName() {
+		
+		List<Chain> finds = ChainDiscovery.findByName("stepValidatorChain");
+		
+		Assert.assertTrue( finds.size() > 0 );
 	}
 	
 }
