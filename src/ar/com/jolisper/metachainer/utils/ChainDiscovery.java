@@ -2,8 +2,6 @@ package ar.com.jolisper.metachainer.utils;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import org.scannotation.AnnotationDB;
@@ -16,6 +14,7 @@ import ar.com.jolisper.metachainer.exception.ChainError;
 
 /**
  * Chain auto-discovery utility
+ *  
  * 
  * @author upsidedownmind
  *
@@ -85,16 +84,15 @@ public class ChainDiscovery {
 	 * @see ChainName
 	 * @return 
 	 */
-	public static List<Chain> findByName(String search) {
+	public static Chain findByName(String search) {
 		 
 		//factory
 		ChainFactory factory = ChainFactory.instance();
 		
-		//result list
-		List<Chain> chains = new ArrayList<Chain>();
+		Chain chain = null;
 		
 		//find by name
-		for (String className : getInstance().chainClasses) {
+		_search : for (String className : getInstance().chainClasses) {
 			
 			Class<?> theClass = null;
 			try {
@@ -108,12 +106,13 @@ public class ChainDiscovery {
 			
 			if( search.equalsIgnoreCase(chainName) ) {
 				//create chain
-				chains.add( factory.create( theClass )  ); 
+				chain = factory.create( theClass )  ; 
+				break _search;
 			}
 			
 		}
 		
-		return chains;
+		return chain;
 
 	}
 }

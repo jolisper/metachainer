@@ -102,11 +102,8 @@ public class MainTest {
 	}
 	
 	@Test
-	public void findChainByName() {
-		
-		List<Chain> finds = ChainDiscovery.findByName("stepValidatorChain");
-		
-		Assert.assertTrue( finds.size() > 0 );
+	public void findChainByName() { 
+		Assert.assertNotNull( ChainDiscovery.findByName("stepValidatorChain") );
 	}
 	
 }
