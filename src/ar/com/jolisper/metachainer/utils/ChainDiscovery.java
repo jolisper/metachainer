@@ -58,6 +58,10 @@ public class ChainDiscovery {
 	private static ChainDiscovery createInstance() {
 		//get path
 		URL[] urls = ClasspathUrlFinder.findClassPaths(); // scan java.class.path
+		
+		/*
+		 * see http://scannotation.sourceforge.net/
+		 */
 		AnnotationDB db = new AnnotationDB(); 
 		
 		//find all classes
