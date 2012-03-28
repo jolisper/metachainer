@@ -7,5 +7,7 @@
 			<attribute name="javadoc_location" value="file:/home/jorge/workspaces/chain/Chain/lib/junit/javadoc/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/scannotation/scannotation-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/scannotation/javassist.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
