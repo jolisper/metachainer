@@ -69,7 +69,7 @@ public class Chain {
 						boi.setStepName(currentStep.getName());
 						boi.setStepOrder(stepMetadata.order());
 						boi.setContext(context);
-						throw boi;
+						context.set("chainException", boi);
 					}
 				}
 			}
@@ -100,7 +100,7 @@ public class Chain {
 				boe.setStepName(currentStep.getName());
 				boe.setStepOrder(stepMetadata.order());
 				boe.setContext(context);
-				throw boe;
+				context.set("chainException", boe);
 			}
 		} catch (IllegalAccessException iae) {
 			throw new ChainError(iae.getMessage(), iae); 

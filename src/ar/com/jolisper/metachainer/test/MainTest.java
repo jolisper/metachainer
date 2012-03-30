@@ -72,31 +72,43 @@ public class MainTest {
 			factory.create(ThereIsAnotherStepWithTheSameOrderNumber.class);
 	}
 
-	@Test(expected=BreakOnErrorException.class)
+	@Test
 	public void breakOnErrorsMethod() {
 
 			ChainFactory factory = ChainFactory.instance();
 			Chain chain = factory.create(BreakOnErrorsMethodChain.class);
 			
 			chain.start();
+			
+			Assert.assertTrue(chain.fail());
+			Assert.assertNotNull(chain.getContext().get("chainException"));
+			Assert.assertTrue(chain.getContext().get("chainException") instanceof BreakOnErrorException);
 	}
 
-	@Test(expected=BreakOnErrorException.class)
+	@Test
 	public void breakOnErrorsClass() {
 			
 			ChainFactory factory = ChainFactory.instance();
 			Chain chain = factory.create(BreakOnErrorsClassChain.class);
 			
 			chain.start();
+			
+			Assert.assertTrue(chain.fail());
+			Assert.assertNotNull(chain.getContext().get("chainException"));
+			Assert.assertTrue(chain.getContext().get("chainException") instanceof BreakOnErrorException);
 	}
 
-	@Test(expected=BreakOnInvalidException.class)
+	@Test
 	public void breakOnInvalidMethod() {
 			
 			ChainFactory factory = ChainFactory.instance();
 			Chain chain = factory.create(BreakOnInvalidMethodChain.class);
 			
 			chain.start();
+			
+			Assert.assertTrue(chain.fail());
+			Assert.assertNotNull(chain.getContext().get("chainException"));
+			Assert.assertTrue(chain.getContext().get("chainException") instanceof BreakOnInvalidException);
 	}
 	
 	@Test
