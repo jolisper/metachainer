@@ -1,7 +1,5 @@
 package ar.com.jolisper.metachainer.test;
 
-import java.util.List;
-
 import junit.framework.Assert;
 
 import org.junit.Test;
