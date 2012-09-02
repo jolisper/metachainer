@@ -17,4 +17,11 @@ public class BreakOnInvalidMethodChain {
 	@ChainStep(order = 1, breakOnInvalid = true)
 	public void invalidMethod(ChainContext context) {
 	}
+	
+	// This step should NOT run
+	@ChainStep(order = 2)
+	public void nextMethod(ChainContext context) {
+		context.set("Step2", "I never should be here");
+	}
+
 }

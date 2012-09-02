@@ -70,6 +70,7 @@ public class Chain {
 						boi.setStepOrder(stepMetadata.order());
 						boi.setContext(context);
 						context.set("chainException", boi);
+						break;
 					}
 				}
 			}

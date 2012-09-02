@@ -109,6 +109,7 @@ public class MainTest {
 			Assert.assertTrue(chain.fail());
 			Assert.assertNotNull(chain.getContext().get("chainException"));
 			Assert.assertTrue(chain.getContext().get("chainException") instanceof BreakOnInvalidException);
+			Assert.assertNull(chain.getContext().get("Step2"));
 	}
 	
 	@Test
