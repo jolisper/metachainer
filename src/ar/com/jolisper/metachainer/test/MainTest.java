@@ -111,6 +111,18 @@ public class MainTest {
 			Assert.assertTrue(chain.getContext().get("chainException") instanceof BreakOnInvalidException);
 			Assert.assertNull(chain.getContext().get("Step2"));
 	}
+
+	@Test
+	public void byPassOnInvalidMethod() { 
+		ChainFactory factory = ChainFactory.instance();
+		Chain chain = factory.create(BypassOnInvalidMethodChain.class);
+		
+		chain.start();
+		
+		Assert.assertNotNull(chain.getContext().get("Step1"));
+		Assert.assertNull(chain.getContext().get("Step2"));
+		Assert.assertNotNull(chain.getContext().get("Step3"));
+	}
 	
 	@Test
 	public void findChainByName() { 

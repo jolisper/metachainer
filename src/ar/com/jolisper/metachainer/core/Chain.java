@@ -1,5 +1,6 @@
 package ar.com.jolisper.metachainer.core;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -40,6 +41,14 @@ public class Chain {
 		this.ensure = ensure;
 		this.context = context;
 		this.setFailOff();
+		
+		try {
+			Field chainField = ChainContext.class.getDeclaredField("chain");
+			chainField.setAccessible(true);
+			chainField.set(context, this);
+		} catch (Exception e) {
+		}
+		
 	}
 	
 	/**
@@ -71,6 +80,8 @@ public class Chain {
 						boi.setContext(context);
 						context.set("chainException", boi);
 						break;
+					} else if (stepMetadata.bypassOnInvalid()) {
+						continue;
 					}
 				}
 			}
