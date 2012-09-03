@@ -13,8 +13,6 @@ import java.util.Map;
 public class ChainContext {
 	
 	private Map<String, Object> context;
-	@SuppressWarnings("unused")
-	private Chain chain;
 	
 	public ChainContext() {
 		context = new HashMap<String, Object>();
