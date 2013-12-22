@@ -4,11 +4,11 @@
 
 	<groupId>ar.com.jolisper.metachainer</groupId>
 	<artifactId>jolisper-metachainer</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.9.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>jolisper-metachainer</name>
-	<url>http://maven.apache.org</url>
+	<url>http://github.com/jolisper/metachainer</url>
 	<description>Simple implementation of chain of responsibility design pattern using annotations</description>
 
 	<properties>
@@ -31,21 +31,41 @@
 		</dependency>
 
 	</dependencies>
-	
+
 	<build>
-	
-	    <plugins>
-	      <plugin>
-		<groupId>org.apache.maven.plugins</groupId>
-		<artifactId>maven-compiler-plugin</artifactId>
-		<version>3.1</version>
-		<configuration>
-		  <source>1.5</source>
-		  <target>1.5</target>
-		</configuration>
-	      </plugin>
-	    </plugins> 
-	    
-	  </build>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<archive>
+						<index>true</index>
+						<manifest>
+							<addClasspath>true</addClasspath>
+						</manifest>
+						<manifestEntries>
+							<Author>jolisper</Author>
+							<mode>development</mode>
+							<url>${project.url}</url>
+							<Version>${project.version}</Version>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+
+	</build>
 
 </project>
